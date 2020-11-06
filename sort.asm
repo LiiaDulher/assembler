@@ -11,10 +11,13 @@ public sort
 ;
 
 sort:
-; We do not call other functions so stack aligning  
-; and stack frame are unnecessary. Looks like shadow space 
-; should be reserved so we also align the stack
-	sub rsp, 0x20 + 0x08
+
+    ;c calling convention
+    push rbp
+    mov rbp, rsp
+    push rdx
+    push rcx
+
 	mov rax, 0
 	mov rsi, rcx
 	dec rsi
@@ -23,10 +26,10 @@ sort:
 		inc rbx
 		loop2:
 		    mov rdi, [rdx+8*rax]
-		    mov rbp, [rdx+8*rbx]
-			cmp rdi, rbp
+		    mov r12, [rdx+8*rbx]
+			cmp rdi, r12
 			jb .noswap
-			mov [rdx+8*rax], rbp
+			mov [rdx+8*rax], r12
 			mov [rdx+8*rbx], rdi
 			.noswap:
 			inc rbx
@@ -36,7 +39,11 @@ sort:
 		inc rax
 		cmp rax, rsi
 		jb loop1
-	add rsp, 0x20 + 0x08
+
+	add rsp, 16
+	mov rsp, rbp
+	pop rbp
+
 	ret
 
 section '.data' writeable
