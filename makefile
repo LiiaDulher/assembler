@@ -10,7 +10,7 @@ all: ${ALL_TARGETS}
 asm_use_sort: asm_use_sort.o sort.o
 	${LINKER} $^ -o $@
 
-asm_use_sort: asm_use_sort.o sort.o
+c_use_sort: c_use_sort.o sort.o
 	${LINKER} $^ -o $@
 
 %.o: %.c
